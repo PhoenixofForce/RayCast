@@ -1,0 +1,58 @@
+package dev.phoenixofforce.frame.renderer;
+
+import dev.phoenixofforce.Main;
+import dev.phoenixofforce.gameobjects.Obstacle;
+import dev.phoenixofforce.gameobjects.Player;
+import dev.phoenixofforce.math.Line;
+import dev.phoenixofforce.math.Util;
+import dev.phoenixofforce.math.Vec2D;
+import dev.phoenixofforce.raycast.RayCastResult;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.List;
+
+public class Renderer3D implements Renderer {
+    @Override
+    public BufferedImage draw(Player player, List<Obstacle> obstacles, List<RayCastResult>[] rayCastResults) {
+        int rayCount = rayCastResults.length;
+
+        BufferedImage image = new BufferedImage(640, 480, BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = image.getGraphics();
+
+        graphics.setColor(Color.black);
+        graphics.fillRect(0, 0, 640, 480);
+
+        final double RAY_WIDTH = (double) image.getWidth() / (double) rayCount;
+
+        for(int i = 0; i < rayCount; i++) {
+            for(int j = rayCastResults[i].size() - 1; j >= 0; j--) {
+                RayCastResult currentResult = rayCastResults[i].get(j);
+
+                Vec2D rayResult = currentResult.getHitPoint();
+                Line hitLine = currentResult.getHitSide();
+                Obstacle obstacle = currentResult.getHitObstacle();
+
+                if(rayResult == null || rayResult.distanceTo(player.getPosition()) > Main.MAX_DISTANCE) continue;
+
+                double angleBetweenObjectAndLookingDirection = rayResult.clone().sub(player.getPosition()).radAngle(player.getLookingDirection());
+                double objectDistance = rayResult.distanceTo(player.getPosition());
+                objectDistance *= Math.abs(Math.cos(angleBetweenObjectAndLookingDirection));	//counteracts fisheye distortion
+
+                double rayHeight = 640 / objectDistance * 10; // the farther away the object is, the smaller it seems
+
+                int bottomYValue = (int) Math.floor((image.getHeight() - rayHeight) / 2.0 + rayHeight);
+                rayHeight *= obstacle.getHeight();
+
+                Vec2D sideNormal = Vec2D.getOrthogonalVector(hitLine.getDirection());
+                double viewingAngleFactor = player.getLookingDirection().clone().normalize().scalar(sideNormal.clone().normalize()) / 2.0 + 0.5;
+
+                Color color = obstacle.getColor(objectDistance + viewingAngleFactor * Main.VIEW_ANGLE_BONUS);
+                graphics.setColor(color);
+                graphics.fillRect((int) Math.floor(RAY_WIDTH * i), (int) (bottomYValue - rayHeight), (int) Math.ceil(RAY_WIDTH), (int) rayHeight);
+            }
+        }
+
+        return image;
+    }
+}

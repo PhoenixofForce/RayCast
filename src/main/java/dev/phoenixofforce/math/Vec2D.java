@@ -1,3 +1,5 @@
+package dev.phoenixofforce.math;
+
 public class Vec2D {
 
 	public static void main(String[] args) {

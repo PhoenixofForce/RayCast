@@ -4,10 +4,14 @@ This is a RayCast Project I made in 2018. It renders 3D Prisms (objects with fla
 ![screenshot of the scene](thumbnail.png)
 
 The project supports:
- - prims with polygonal base
+ - prisms with polygonal base
  - different colors
  - different heights
- - highlighting the outline of the object
+
+### Resources
+- https://lodev.org/cgtutor/raycasting.html
+- https://permadi.com/1996/05/ray-casting-tutorial-table-of-contents/
+- https://github.com/vinibiavatti1/RayCastingTutorial/wiki
 
 ### Controls
 In the 2D area you can:
