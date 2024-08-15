@@ -3,18 +3,19 @@ package dev.phoenixofforce.gameobjects;
 import dev.phoenixofforce.frame.control.KeyInputs;
 import dev.phoenixofforce.math.Line;
 import dev.phoenixofforce.math.Vec2D;
-import dev.phoenixofforce.raycast.RayCastResult;
 import lombok.Data;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Data
 public class Player {
 
 	private Vec2D position, lookingDirection;
+    private double height = 1;
+    private double lookingAngle = 0;
 
 	public Player(double x, double y) {
 		this.position = new Vec2D(x, y);
@@ -47,6 +48,22 @@ public class Player {
 			newPos.sub(Vec2D.getOrthogonalVector(lookingDirection).clone().normalize(1));
 		}
 
+        if(input.isPressed(KeyEvent.VK_SPACE)) {
+            height += 0.2;
+        }
+
+        if(input.isPressed(KeyEvent.VK_SHIFT)) {
+            height -= 0.2;
+        }
+
+        if(input.isPressed(KeyEvent.VK_R)) {
+            lookingAngle = Math.min(lookingAngle + 3, 100);
+        }
+
+        if(input.isPressed(KeyEvent.VK_F)) {
+            lookingAngle = Math.max(lookingAngle - 3, -20);
+        }
+
 		Line playerMovement = new Line(position, newPos);
 		for(Obstacle obstacle: obstacles) {
 			Polygon p = obstacle.getPolygon();
@@ -68,5 +85,4 @@ public class Player {
 		}
 		position = newPos;
 	}
-
 }

@@ -4,7 +4,6 @@ import dev.phoenixofforce.Main;
 import dev.phoenixofforce.gameobjects.Obstacle;
 import dev.phoenixofforce.gameobjects.Player;
 import dev.phoenixofforce.math.Line;
-import dev.phoenixofforce.math.Util;
 import dev.phoenixofforce.math.Vec2D;
 import dev.phoenixofforce.raycast.RayCastResult;
 
@@ -14,14 +13,11 @@ import java.util.List;
 
 public class Renderer3D implements Renderer {
 
-    private double t = 0;
     private double center = 640 / 2;
 
     @Override
     public BufferedImage draw(Player player, List<Obstacle> obstacles, List<RayCastResult>[] rayCastResults) {
         int rayCount = rayCastResults.length;
-        t += 0.01;
-        double sinVal = Math.sin(t) * 10;
 
         BufferedImage image = new BufferedImage(640, 480, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = image.getGraphics();
@@ -47,10 +43,8 @@ public class Renderer3D implements Renderer {
 
                 double rayHeight = 640 / objectDistance * 10; // the farther away the object is, the smaller it seems
 
-                double playerHeight = Math.max(1, sinVal);   //jump or crouch
-                double lookUpDown = 0;//sinVal * 10;
-                int bottomYValue = (int) (center + rayHeight / 2 * playerHeight);
-                bottomYValue += lookUpDown;
+                double bottomYValue = center + rayHeight / 2 * (player.getHeight() - obstacle.getZ());
+                bottomYValue += player.getLookingAngle();
                 rayHeight *= obstacle.getHeight();
 
                 Vec2D sideNormal = Vec2D.getOrthogonalVector(hitLine.getDirection());

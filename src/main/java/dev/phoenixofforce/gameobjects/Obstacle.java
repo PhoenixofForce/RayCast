@@ -15,9 +15,10 @@ public class Obstacle {
 	private Shape shape;
 	private Color color;
 	private float height;
+	private float z;
 
 	public Obstacle(Shape shape) {
-		this(shape, Color.WHITE, 1);
+		this(shape, Color.WHITE, 1F, (float) (Math.random() * 10.0F));
 	}
 
 	public Polygon getPolygon() {

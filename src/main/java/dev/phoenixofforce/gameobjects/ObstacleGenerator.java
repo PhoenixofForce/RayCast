@@ -17,7 +17,7 @@ public class ObstacleGenerator {
                 p.addPoint(x*20+20, y*20+20);
                 p.addPoint(x*20, y*20+20);
 
-                polygons.add(new Obstacle(p, new Color(new Random().nextInt()), (float) Math.random() * 5));
+                polygons.add(new Obstacle(p, new Color(new Random().nextInt()), (float) Math.random() * 5, (float) Math.random() * 2));
             }
         }
 
@@ -26,7 +26,7 @@ public class ObstacleGenerator {
         border.addPoint(0, 480);
         border.addPoint(640, 480);
         border.addPoint(640, 0);
-        polygons.add(new Obstacle(border, Color.WHITE, 2));
+        polygons.add(new Obstacle(border, Color.WHITE, 2, 0));
 
         return polygons;
     }
