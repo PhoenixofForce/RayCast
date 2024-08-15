@@ -20,7 +20,7 @@ public class Frame {
     private Player player;
 
     public Frame(Player player) {
-        frame = new JFrame("RayCast");
+        frame = new JFrame("");
         frame.setResizable(false);
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -40,6 +40,7 @@ public class Obstacle {
 			iterator.next();
 		}
 
+		shape = p;
 		return p;
 	}
 
